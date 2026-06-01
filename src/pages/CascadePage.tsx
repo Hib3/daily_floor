@@ -30,7 +30,7 @@ export function CascadePage({ route }: { route: string }) {
 
   useEffect(() => {
     db.tasks.toArray().then((all) => {
-      const active = all.filter((item) => item.active);
+      const active = all.filter((item) => item.active && item.id !== "morning-checkin" && item.id !== "night-review");
       setTasks(active);
       setTask(active.find((item) => item.id === taskId) ?? active[0]);
     });
@@ -62,11 +62,13 @@ export function CascadePage({ route }: { route: string }) {
     <div className="stack">
       <Card title={`カスケード: ${task.title}`}>
         <p className="lead">5分でやめてよい。続けてもよい。5分できたら成功。</p>
+        <p className="small-text">下の画面で、できたボタンを押すと記録してTodayへ戻ります。「次へ」は、今の段階が重い時にさらに小さくするボタンです。</p>
         <div className="stepper">{["感情", "if-then", "報酬", "5分", "開く", "休養"].map((label, index) => <span key={label} className={index <= stepIndex(step) ? "on" : ""}>{label}</span>)}</div>
       </Card>
 
       {step === "emotion_label" && (
         <Card title="今、何を避けようとしている？">
+          <p className="small-text">ここは準備です。選んでもゴールにはならず、次の小さい手順へ進みます。</p>
           <Field label="近い感情"><Select value={emotion} onChange={(event) => setEmotion(event.target.value as EmotionLabel)}>{emotionOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</Select></Field>
           <Field label="短いメモ"><TextArea value={note} onChange={(event) => setNote(event.target.value)} /></Field>
           <button className="primary" onClick={() => setStep("if_then")}>保存して次へ</button>
@@ -76,8 +78,9 @@ export function CascadePage({ route }: { route: string }) {
       {step === "if_then" && (
         <Card title="実行意図">
           <p>{intention?.exampleText ?? `もし ${task.defaultTrigger ?? "予定時刻になったら"}、${task.contactGoal}。`}</p>
+          <p className="small-text">これを実行できたら今日のゴールとして記録します。重い時は次へ進んで、もっと小さくします。</p>
           <div className="button-row">
-            <button className="primary" onClick={() => finish("floor_done")}>実行できた</button>
+            <button className="primary" onClick={() => finish("floor_done", "if-thenを実行できたので、今日のfloor達成として保存しました。")}>実行できたので記録</button>
             <button onClick={() => updateIntention(false).then(() => setStep("temptation_bundle"))}>実行できなかったので次へ</button>
             <a className="button" href="#/intentions">編集する</a>
           </div>
@@ -87,10 +90,11 @@ export function CascadePage({ route }: { route: string }) {
       {step === "temptation_bundle" && (
         <Card title="報酬を束ねる">
           <p>{task.temptationBundle?.ruleText ?? "小さい報酬を、接触している間だけ使います。"}</p>
+          <p className="small-text">報酬が助けになって少し触れられたら記録します。まだ重ければ5分タイマーへ進みます。</p>
           <div className="button-row">
             {task.temptationBundle?.rewardUrl && <a className="button" href={task.temptationBundle.rewardUrl} target="_blank">報酬を開く</a>}
-            {task.taskUrl && <a className="button" href={task.taskUrl} target="_blank">課題ページを開く</a>}
-            <button className="primary" onClick={() => finish("low_energy_done")}>助けになった</button>
+            {task.taskUrl && <a className="button" href={task.taskUrl} target="_blank">対象ページを開く</a>}
+            <button className="primary" onClick={() => finish("low_energy_done", "報酬を使って接触できた記録を保存しました。")}>助けになったので記録</button>
             <button onClick={() => setStep("five_min_timer")}>次へ</button>
           </div>
         </Card>
@@ -98,22 +102,24 @@ export function CascadePage({ route }: { route: string }) {
 
       {step === "five_min_timer" && (
         <Card title="5分タイマー">
+          <p className="small-text">タイマー完了後に、終わった・続けた・止まったのどれかを選ぶと記録できます。</p>
           <div className="timer">{Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, "0")}</div>
           <div className="button-row">
             <button className="primary" onClick={() => setTimerState("running")}>開始</button>
             <button onClick={() => setTimerState("idle")}>一時停止</button>
             <button onClick={() => { setTimerState("idle"); setRemaining(300); }}>キャンセル</button>
           </div>
-          {timerState === "done" && <div className="button-row"><button onClick={() => finish("floor_done")}>5分で終了した</button><button onClick={() => finish("normal_done")}>続けた</button><button onClick={() => setStep("open_only")}>途中で止まった</button></div>}
+          {timerState === "done" && <div className="button-row"><button onClick={() => finish("floor_done", "5分できた記録を保存しました。今日はここで止めても成功です。")}>5分で終了したので記録</button><button onClick={() => finish("normal_done", "5分後も続けた記録を保存しました。")}>続けたので記録</button><button onClick={() => setStep("open_only")}>途中で止まったので次へ</button></div>}
         </Card>
       )}
 
       {step === "open_only" && (
         <Card title="開くだけ">
           <p>読まなくていい。理解しなくていい。開いたら成功。</p>
+          <p className="small-text">ページ・メモ・場所を開いた事実だけを保存します。作業時間は0秒でも完了です。</p>
           <div className="button-row">
             {task.taskUrl && <a className="button" href={task.taskUrl} target="_blank">{task.title}を開く</a>}
-            <button className="primary" onClick={() => finish("contact_done")}>ページを開いた</button>
+            <button className="primary" onClick={() => finish("contact_done", "開いただけの接触を保存しました。今日の接触ゴールは完了です。")}>開いたので記録</button>
             <button onClick={() => setStep("rest_log")}>開けなかったので休養ログへ</button>
           </div>
         </Card>
@@ -132,7 +138,7 @@ export function CascadePage({ route }: { route: string }) {
     });
   }
 
-  async function finish(outcome: "normal_done" | "low_energy_done" | "floor_done" | "contact_done") {
+  async function finish(outcome: "normal_done" | "low_energy_done" | "floor_done" | "contact_done", message: string) {
     if (!task) return;
     await updateIntention(true);
     const now = nowIso();
@@ -147,12 +153,19 @@ export function CascadePage({ route }: { route: string }) {
       outcome,
       note
     });
+    sessionStorage.setItem("daily-floor-message", `${task.title}: ${message}`);
     location.hash = "#/today";
   }
 }
 
 function TaskPicker({ tasks }: { tasks: ActivationTask[] }) {
-  return <Card title="タスクを選ぶ">{tasks.map((task) => <a className="button block" key={task.id} href={`#/cascade/${task.id}`}>{task.title}</a>)}</Card>;
+  return (
+    <Card title="タスクを選ぶ">
+      <p className="small-text">ここで選ぶと、細かく開始する画面に進みます。選んだだけでは記録されません。</p>
+      {tasks.map((task) => <a className="button block" key={task.id} href={`#/cascade/${task.id}`}>{task.title}を細かく開始</a>)}
+      <a className="button block" href="#/tasks">使いたいタスクを追加する</a>
+    </Card>
+  );
 }
 
 function RestForm({ task, emotion, note }: { task: ActivationTask; emotion: EmotionLabel; note: string }) {
@@ -173,6 +186,7 @@ function RestForm({ task, emotion, note }: { task: ActivationTask; emotion: Emot
       createdAt: now
     });
     await db.avoidanceSessions.add({ id: makeId("session"), date: todayString(), taskId: task.id, startedAt: now, endedAt: now, emotionLabel: emotion, cascadeStepReached: "rest_log", outcome: "rest_logged", note });
+    sessionStorage.setItem("daily-floor-message", `${task.title}: 休養ログを保存しました。これは失敗ではなく、今日の状態を残すゴールです。`);
     location.hash = "#/today";
   }
   return (

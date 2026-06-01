@@ -38,6 +38,38 @@ export function GuidePage() {
         </dl>
       </Card>
 
+      <Card title="何をしたらゴール？">
+        <p className="lead">今日のゴールは、通常量を終わらせることだけではありません。</p>
+        <ul className="guide-list">
+          <li>タスクを少し進めた</li>
+          <li>5分だけ触れた</li>
+          <li>ページやメモを開いただけ</li>
+          <li>今日は無理だと休養ログを残した</li>
+        </ul>
+        <p>このどれかを記録したら、その日のゴールとして扱います。</p>
+      </Card>
+
+      <Card title="ボタンを押すと何が起きる？">
+        <dl className="plain-dl">
+          <div>
+            <dt>細かく開始</dt>
+            <dd>タスクを小さい手順に分ける画面へ移動します。押しただけでは記録されません。</dd>
+          </div>
+          <div>
+            <dt>接触を記録</dt>
+            <dd>「開いた・見た・触れた」をその場で保存します。保存後は同じ画面にメッセージが出ます。</dd>
+          </div>
+          <div>
+            <dt>休養を記録</dt>
+            <dd>今日は休むことをその場で保存します。保存後は同じ画面にメッセージが出ます。</dd>
+          </div>
+          <div>
+            <dt>状態メモ</dt>
+            <dd>今の眠気や身体の重さを残します。空欄があっても保存できます。</dd>
+          </div>
+        </dl>
+      </Card>
+
       <Card title="言葉の意味">
         <dl className="plain-dl">
           <div>
