@@ -4,6 +4,7 @@ const nav = [
   ["今日", "/today"],
   ["記録", "/checkin"],
   ["カスケード", "/cascade"],
+  ["ガイド", "/guide"],
   ["レポート", "/reports"],
   ["設定", "/settings"]
 ];

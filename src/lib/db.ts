@@ -53,13 +53,35 @@ export const db = new DailyFloorDb();
 
 export async function seedIfNeeded(database = db): Promise<void> {
   const settings = await database.settings.get("app");
-  if (settings) return;
+  if (settings) {
+    await ensureGeneralLifeSeed(database);
+    return;
+  }
   await database.transaction("rw", database.tasks, database.intentions, database.reminderRules, database.settings, async () => {
     await database.tasks.bulkPut(defaultTasks());
     await database.intentions.bulkPut(defaultIntentions());
     await database.reminderRules.bulkPut(defaultReminderRules());
     await database.settings.put(defaultSettings());
   });
+}
+
+async function ensureGeneralLifeSeed(database: DailyFloorDb): Promise<void> {
+  const hasLifeTask = await database.tasks.get("daily-life-task");
+  if (!hasLifeTask) {
+    const tasks = defaultTasks().filter((task) => task.id === "daily-life-task" || task.id === "admin-contact");
+    await database.tasks.bulkPut(tasks);
+  }
+  const hasLifeIntention = await database.intentions.get("intent_life_default");
+  if (!hasLifeIntention) {
+    await database.intentions.bulkPut(defaultIntentions());
+  }
+  const oldReminder = await database.reminderRules.get("rem_1000");
+  if (oldReminder?.targetRoute === "/cascade/az900") {
+    await database.reminderRules.update("rem_1000", {
+      title: "今日のfloor / 生活タスク",
+      targetRoute: "/cascade/daily-life-task"
+    });
+  }
 }
 
 export async function clearAllLocalData(database = db): Promise<void> {

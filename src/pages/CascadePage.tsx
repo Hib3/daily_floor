@@ -112,7 +112,7 @@ export function CascadePage({ route }: { route: string }) {
         <Card title="開くだけ">
           <p>読まなくていい。理解しなくていい。開いたら成功。</p>
           <div className="button-row">
-            {task.taskUrl && <a className="button" href={task.taskUrl} target="_blank">Microsoft Learnを開く</a>}
+            {task.taskUrl && <a className="button" href={task.taskUrl} target="_blank">{task.title}を開く</a>}
             <button className="primary" onClick={() => finish("contact_done")}>ページを開いた</button>
             <button onClick={() => setStep("rest_log")}>開けなかったので休養ログへ</button>
           </div>

@@ -80,7 +80,7 @@ export function nextCascadeStep(step: CascadeStep, outcome: "success" | "continu
 export function energyMessage(level: EnergyLevel): string {
   if (level === "A") return "今日は通常量を選べます。接触だけでも成功です。";
   if (level === "B") return "今日は低エネルギー目標で十分です。小さく接触を残します。";
-  if (level === "C") return "今日の成功条件は、通常量ではなく床を守ることです。";
+  if (level === "C") return "今日の成功条件は、通常量ではなくfloorを守ることです。";
   if (level === "D") return "今日の成功条件は、通常量ではなく接触を切らないことです。";
   return "今日は休養とログを優先します。記録は失敗ではありません。";
 }

@@ -99,7 +99,7 @@ export function counselorMarkdown(analysis: WeeklyAnalysis): string {
   return sanitizeReport(`# カウンセラー共有用メモ
 
 ## 事実
-- AZ-900に接触できた日数: ${analysis.taskContactDays}
+- 生活/作業タスクに接触できた日数: ${analysis.taskContactDays}
 - 休養ログになった日数: ${analysis.restLogs}
 - 多かった回避感情: ${analysis.mostCommonEmotion}
 - 自己批判が出た回数: ${analysis.selfCriticismCount}
@@ -124,7 +124,7 @@ export function doctorMarkdown(analysis: WeeklyAnalysis): string {
 - 昼寝: 長めの日 ${analysis.longNapDays} 日
 - カフェイン: 遅めの記録 ${analysis.lateCaffeineEntries} 件
 - 活動量: 接触日 ${analysis.taskContactDays} 日
-- 勉強/作業への接触状況: 通常 ${analysis.normalCompletions} / 低エネルギー ${analysis.lowEnergyCompletions} / floor ${analysis.floorCompletions} / 接触 ${analysis.contactOnlyCompletions}
+- 生活/作業タスクへの接触状況: 通常 ${analysis.normalCompletions} / 低エネルギー ${analysis.lowEnergyCompletions} / floor ${analysis.floorCompletions} / 接触 ${analysis.contactOnlyCompletions}
 
 ## 注意して見たい変化
 - 睡眠不足なのに活動量が増えた日

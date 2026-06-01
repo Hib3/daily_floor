@@ -14,7 +14,7 @@ export default defineConfig({
       manifest: {
         name: "Daily Floor",
         short_name: "Floor",
-        description: "接触・床・休養ログを大切にするローカルファーストPWA",
+        description: "接触・floor・休養ログを大切にするローカルファーストPWA",
         start_url: `${base}#/today`,
         scope: base,
         display: "standalone",
@@ -25,7 +25,7 @@ export default defineConfig({
           { src: "icons/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any maskable" }
         ],
         shortcuts: [
-          { name: "今日の床", short_name: "今日", url: `${base}#/today`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
+          { name: "今日のfloor", short_name: "今日", url: `${base}#/today`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "チェックイン", short_name: "記録", url: `${base}#/checkin`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "カスケード開始", short_name: "開始", url: `${base}#/cascade`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "夜レビュー", short_name: "夜", url: `${base}#/night-review`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },

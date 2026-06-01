@@ -22,8 +22,46 @@ function TasksPage() {
     await db.tasks.update(task.id, { [key]: value, updatedAt: nowIso() });
     setTasks(await db.tasks.toArray());
   }
+  async function addTask(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const title = String(form.get("title") || "").trim();
+    if (!title) return;
+    const now = nowIso();
+    const floorGoal = String(form.get("floorGoal") || `${title}に1回だけ触れる`);
+    await db.tasks.add({
+      id: makeId("task"),
+      title,
+      category: "other",
+      normalGoal: String(form.get("normalGoal") || `${title}を25分進める`),
+      lowEnergyGoal: String(form.get("lowEnergyGoal") || `${title}を5分だけ進める`),
+      floorGoal,
+      contactGoal: String(form.get("contactGoal") || `${title}のメモ・画面・場所を開くだけ`),
+      defaultTrigger: String(form.get("defaultTrigger") || "チェックイン後"),
+      defaultTime: "10:00",
+      taskUrl: String(form.get("taskUrl") || ""),
+      active: true,
+      createdAt: now,
+      updatedAt: now
+    });
+    event.currentTarget.reset();
+    setTasks(await db.tasks.toArray());
+  }
   return (
     <div className="stack">
+      <Card title="生活タスクを追加">
+        <p className="small-text">勉強だけでなく、家事、連絡、手続き、片付け、体調管理など何でも入れられます。</p>
+        <form className="form-grid" onSubmit={addTask}>
+          <Field label="名前"><TextInput name="title" placeholder="例: 洗濯、メール返信、書類手続き" /></Field>
+          <Field label="普通にできる日の目標"><TextInput name="normalGoal" placeholder="例: 25分進める / 1件終わらせる" /></Field>
+          <Field label="低エネルギー日の目標"><TextInput name="lowEnergyGoal" placeholder="例: 5分だけ進める" /></Field>
+          <Field label="floor"><TextInput name="floorGoal" placeholder="例: 画面を開く / 物を1つだけ動かす" /></Field>
+          <Field label="接触だけ"><TextInput name="contactGoal" placeholder="例: メモを見るだけ" /></Field>
+          <Field label="きっかけ"><TextInput name="defaultTrigger" placeholder="例: 朝食後 / 10:00になったら" /></Field>
+          <Field label="URL任意"><TextInput name="taskUrl" /></Field>
+          <button className="primary">追加</button>
+        </form>
+      </Card>
       <Card title="タスク">
         {tasks.map((task) => (
           <article className="edit-card" key={task.id}>
@@ -155,7 +193,7 @@ function NightReviewPage() {
       cascadeStepReached: "open_only",
       outcome: "contact_done",
       selfCriticism: form.get("selfCriticism") === "on",
-      note: `接触:${form.get("contact")}; 段階:${form.get("stage")}; 明日の床:${form.get("tomorrowFloor")}; trigger:${form.get("trigger")}`
+      note: `接触:${form.get("contact")}; 段階:${form.get("stage")}; 明日のfloor:${form.get("tomorrowFloor")}; trigger:${form.get("trigger")}`
     });
     location.hash = "#/today";
   }
@@ -163,7 +201,7 @@ function NightReviewPage() {
     <Card title="夜レビュー">
       <form className="form-grid" onSubmit={submit}>
         <label className="check"><input type="checkbox" name="checkin" /> 今日チェックインした</label>
-        <label className="check"><input type="checkbox" name="contact" /> 今日の床に接触した</label>
+        <label className="check"><input type="checkbox" name="contact" /> 今日のfloorに接触した</label>
         <Field label="どの段階で動けたか"><TextInput name="stage" /></Field>
         <label className="check"><input type="checkbox" name="selfCriticism" /> 自己批判が来た</label>
         <Field label="明日の最低ライン"><TextInput name="tomorrowFloor" /></Field>
@@ -179,7 +217,7 @@ function SharePage() {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    await db.sharedNotes.add({ id: makeId("share"), title: String(form.get("title") || ""), text: String(form.get("text") || ""), url: String(form.get("url") || ""), taskId: String(form.get("taskId") || "az900"), createdAt: nowIso() });
+    await db.sharedNotes.add({ id: makeId("share"), title: String(form.get("title") || ""), text: String(form.get("text") || ""), url: String(form.get("url") || ""), taskId: String(form.get("taskId") || "daily-life-task"), createdAt: nowIso() });
     location.hash = "#/today";
   }
   return (
@@ -188,7 +226,7 @@ function SharePage() {
         <Field label="タイトル"><TextInput name="title" defaultValue={params.get("title") ?? ""} /></Field>
         <Field label="URL"><TextInput name="url" defaultValue={params.get("url") ?? ""} /></Field>
         <Field label="メモ"><TextArea name="text" defaultValue={params.get("text") ?? ""} /></Field>
-        <Field label="関連タスク"><TextInput name="taskId" defaultValue="az900" /></Field>
+        <Field label="関連タスク"><TextInput name="taskId" defaultValue="daily-life-task" /></Field>
         <button className="primary">保存</button>
       </form>
     </Card>

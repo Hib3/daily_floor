@@ -15,13 +15,14 @@ export function TodayPage() {
   useEffect(() => {
     Promise.all([
       db.checkins.where("date").equals(today).first(),
-      db.tasks.toArray().then((all) => all.filter((task) => task.active)),
-      db.avoidanceSessions.where("date").equals(today).and((s) => s.taskId === "night-review").first()
-    ]).then(([daily, activeTasks, night]) => {
+      db.tasks.toArray().then((all) => all.filter((task) => task.active && task.id !== "morning-checkin" && task.id !== "night-review")),
+      db.avoidanceSessions.where("date").equals(today).and((s) => s.taskId === "night-review").first(),
+      db.avoidanceSessions.where("date").equals(today).and((s) => s.taskId !== "morning-checkin" && s.taskId !== "night-review" && s.outcome !== "abandoned").first()
+    ]).then(([daily, activeTasks, night, hasTaskContact]) => {
       setCheckin(daily);
       setTasks(activeTasks);
       setNightDone(Boolean(night));
-      const missing = Number(!daily) + Number(!activeTasks.some((t) => t.id === "az900")) + Number(!night);
+      const missing = Number(!daily) + Number(!hasTaskContact) + Number(!night);
       updateBadge(missing).catch(() => undefined);
     });
   }, [today]);
@@ -37,7 +38,17 @@ export function TodayPage() {
         </div>
       </Card>
 
-      <Card title="今日の床">
+      <Card title="迷ったらここから">
+        <ol className="guide-list">
+          <li>まず「チェックイン」で今の状態を記録します。</li>
+          <li>次に「開始」を押します。できそうなら進め、重ければ「開くだけ」や「休養ログ」でOKです。</li>
+          <li>夜に「夜レビュー」で明日のfloorを1つだけ決めます。</li>
+        </ol>
+        <p className="small-text">専門用語は覚えなくて大丈夫です。画面のボタンを上から順に押せば進めます。</p>
+      </Card>
+
+      <Card title="今日のfloor">
+        {tasks.length === 0 && <p>生活タスクを追加すると、ここに今日の小さい一歩が出ます。</p>}
         {tasks.map((task) => (
           <article className="task-line" key={task.id}>
             <div>
@@ -51,6 +62,7 @@ export function TodayPage() {
             </div>
           </article>
         ))}
+        <a className="button" href="#/tasks">タスクを追加・編集</a>
       </Card>
 
       <Card title="通知/予定">

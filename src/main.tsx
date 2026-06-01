@@ -11,6 +11,7 @@ import { SimplePages } from "./pages/SimplePages";
 import { ReportsPage } from "./pages/ReportsPage";
 import { BackupPage } from "./pages/BackupPage";
 import { SettingsPage } from "./pages/SettingsPage";
+import { GuidePage } from "./pages/GuidePage";
 
 function useHashRoute(): string {
   const [route, setRoute] = useState(location.hash.replace(/^#/, "") || "/today");
@@ -53,6 +54,7 @@ function Route({ route }: { route: string }) {
   if (route.startsWith("/reports")) return <ReportsPage />;
   if (route.startsWith("/backup")) return <BackupPage />;
   if (route.startsWith("/settings")) return <SettingsPage />;
+  if (route.startsWith("/guide")) return <GuidePage />;
   if (["/tasks", "/intentions", "/bundles", "/timers", "/sleep", "/night-review", "/review", "/share"].some((item) => route.startsWith(item))) {
     return <SimplePages route={route} />;
   }
