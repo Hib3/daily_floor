@@ -45,11 +45,11 @@ export function defaultTasks(): ActivationTask[] {
     },
     {
       id: "morning-checkin",
-      title: "朝チェックイン",
+      title: "状態メモ",
       category: "health",
-      normalGoal: "睡眠・眠気・気分・今日の予定を入力する",
-      lowEnergyGoal: "睡眠時間と眠気だけ入力する",
-      floorGoal: "起床時刻だけ入力する",
+      normalGoal: "眠気・気分・不安・身体の重さを入力する",
+      lowEnergyGoal: "今の眠気と身体の重さだけ入力する",
+      floorGoal: "今の状態を一言だけメモする",
       contactGoal: "Daily Floorを開くだけ",
       defaultTime: "09:00",
       active: true,
@@ -92,7 +92,7 @@ export function defaultIntentions(): ImplementationIntention[] {
 
 export function defaultReminderRules(): ReminderRule[] {
   return [
-    { id: "rem_0900", title: "朝チェックイン", time: "09:00", enabled: true, kind: "checkin", targetRoute: "/checkin" },
+    { id: "rem_0900", title: "状態メモ", time: "09:00", enabled: true, kind: "checkin", targetRoute: "/checkin" },
     { id: "rem_1000", title: "今日のfloor / 生活タスク", time: "10:00", enabled: true, kind: "task", targetRoute: "/cascade/daily-life-task" },
     { id: "rem_1300", title: "昼寝するなら20分まで", time: "13:00", enabled: true, kind: "nap", targetRoute: "/sleep" },
     { id: "rem_1400", title: "カフェイン終了", time: "14:00", enabled: true, kind: "caffeine", targetRoute: "/sleep" },

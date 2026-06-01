@@ -31,20 +31,21 @@ export function TodayPage() {
     <div className="stack">
       <Card title="今日の状態">
         <p className="lead">{energyMessage(energy)}</p>
-        <p>チェックイン: {checkin ? `済み / エネルギー ${checkin.energyLevel}` : "未記録"}</p>
+        <p>状態メモ: {checkin ? `済み / エネルギー ${checkin.energyLevel}` : "未記録。空欄があっても使えます。"}</p>
         <div className="button-row">
-          <a className="button primary" href="#/checkin">チェックイン</a>
+          <a className="button primary" href="#/checkin">状態メモ</a>
+          <a className="button" href="#/cascade">今すぐ開始</a>
           <a className="button" href="#/sleep">睡眠ログ</a>
         </div>
       </Card>
 
       <Card title="迷ったらここから">
         <ol className="guide-list">
-          <li>まず「チェックイン」で今の状態を記録します。</li>
-          <li>次に「開始」を押します。できそうなら進め、重ければ「開くだけ」や「休養ログ」でOKです。</li>
+          <li>記録できる時だけ「状態メモ」を押します。起床時でなければ空欄でOKです。</li>
+          <li>記録が重い時は、そのままタスクの「開始」か「接触できた」を押します。</li>
           <li>夜に「夜レビュー」で明日のfloorを1つだけ決めます。</li>
         </ol>
-        <p className="small-text">専門用語は覚えなくて大丈夫です。画面のボタンを上から順に押せば進めます。</p>
+        <p className="small-text">入口は1つではありません。状態メモ、開始、接触できた、休養ログ、タスク追加のどれからでも使えます。</p>
       </Card>
 
       <Card title="今日のfloor">

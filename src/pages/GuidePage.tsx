@@ -4,13 +4,38 @@ export function GuidePage() {
   return (
     <div className="stack">
       <Card title="はじめての使い方">
-        <ol className="guide-list">
-          <li>朝か作業前に「チェックイン」を押します。</li>
-          <li>いまの眠気・気分・不安・身体の重さをざっくり入れます。</li>
-          <li>「今日」に戻ると、今の状態に合った小さい目標が出ます。</li>
-          <li>タスクの「開始」を押します。重ければ途中で「開くだけ」や「休養ログ」に進めます。</li>
-          <li>夜に「夜レビュー」を押して、明日のfloorを1つだけ決めます。</li>
-        </ol>
+        <p className="lead">入口は「チェックイン」だけではありません。</p>
+        <p>起床時ではない、入力する気力がない、何から始めるか決まっていない時は、チェックインを飛ばして大丈夫です。</p>
+        <div className="button-row">
+          <a className="button primary" href="#/cascade">今あるタスクを開始</a>
+          <a className="button" href="#/today">今日の画面へ</a>
+          <a className="button" href="#/tasks">タスクを追加</a>
+        </div>
+      </Card>
+
+      <Card title="状況別の入口">
+        <dl className="plain-dl">
+          <div>
+            <dt>今の状態を軽く入れられる</dt>
+            <dd>「状態メモ」を押します。睡眠や起床時刻が不明なら空欄でOKです。</dd>
+          </div>
+          <div>
+            <dt>もうタスクに触れたい</dt>
+            <dd>「開始」を押します。感情確認から始まり、重ければ途中で「開くだけ」や「休養ログ」に進めます。</dd>
+          </div>
+          <div>
+            <dt>開くだけならできそう</dt>
+            <dd>Today画面の「接触できた」を押します。作業時間が0秒でも記録できます。</dd>
+          </div>
+          <div>
+            <dt>今日は無理そう</dt>
+            <dd>「休養ログ」を押します。失敗ではなく、あとで傾向を見るための記録です。</dd>
+          </div>
+          <div>
+            <dt>使いたい対象がない</dt>
+            <dd>「タスクを追加」で、家事・連絡・手続き・勉強・体調管理などを1つ追加します。</dd>
+          </div>
+        </dl>
       </Card>
 
       <Card title="言葉の意味">

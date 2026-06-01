@@ -82,6 +82,20 @@ async function ensureGeneralLifeSeed(database: DailyFloorDb): Promise<void> {
       targetRoute: "/cascade/daily-life-task"
     });
   }
+  const morningTask = await database.tasks.get("morning-checkin");
+  if (morningTask?.title === "朝チェックイン") {
+    await database.tasks.update("morning-checkin", {
+      title: "状態メモ",
+      normalGoal: "眠気・気分・不安・身体の重さを入力する",
+      lowEnergyGoal: "今の眠気と身体の重さだけ入力する",
+      floorGoal: "今の状態を一言だけメモする",
+      updatedAt: new Date().toISOString()
+    });
+  }
+  const checkinReminder = await database.reminderRules.get("rem_0900");
+  if (checkinReminder?.title === "朝チェックイン") {
+    await database.reminderRules.update("rem_0900", { title: "状態メモ" });
+  }
 }
 
 export async function clearAllLocalData(database = db): Promise<void> {

@@ -26,7 +26,7 @@ export default defineConfig({
         ],
         shortcuts: [
           { name: "今日のfloor", short_name: "今日", url: `${base}#/today`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
-          { name: "チェックイン", short_name: "記録", url: `${base}#/checkin`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
+          { name: "状態メモ", short_name: "状態", url: `${base}#/checkin`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "カスケード開始", short_name: "開始", url: `${base}#/cascade`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "夜レビュー", short_name: "夜", url: `${base}#/night-review`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "レポート", short_name: "報告", url: `${base}#/reports`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },

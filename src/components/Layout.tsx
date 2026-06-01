@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 const nav = [
   ["今日", "/today"],
-  ["記録", "/checkin"],
+  ["状態", "/checkin"],
   ["カスケード", "/cascade"],
   ["ガイド", "/guide"],
   ["レポート", "/reports"],
