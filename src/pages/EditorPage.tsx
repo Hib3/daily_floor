@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Field, TextArea, TextInput } from "../components/Fields";
 import { db } from "../lib/db";
 import type { LifelogAttachment, LifelogEntry, LifelogKind, LifelogMood } from "../lib/types";
-import { assertNoDiagnosticLanguage, isoFromLocalInput, nowLocalInputValue } from "../lib/lifelog";
+import { isoFromLocalInput, nowLocalInputValue } from "../lib/lifelog";
 
 const kindLabels: Array<[LifelogKind, string]> = [
   ["text", "日記"],
@@ -39,7 +39,6 @@ export function EditorPage() {
     const now = new Date().toISOString();
     const title = String(form.get("title") || "").trim();
     const body = String(form.get("body") || "").trim();
-    assertNoDiagnosticLanguage(`${title} ${body}`);
     const payload: LifelogEntry = {
       id: entry?.id ?? crypto.randomUUID(),
       journalId: kind === "health" || kind === "rest" ? "health" : "life",

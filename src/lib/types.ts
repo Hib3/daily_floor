@@ -189,7 +189,55 @@ export type LifelogEntry = {
   shareCandidate: boolean;
 };
 
-export type LifelogView = "list" | "calendar" | "media";
+export type LifelogView = "list" | "calendar" | "media" | "purpose";
+
+export type PurposeCategory = "life" | "work" | "study" | "health" | "relationship" | "home" | "other";
+
+export type PurposeStatus = "active" | "paused" | "done";
+
+export type PurposeGoal = {
+  id: string;
+  title: string;
+  why?: string;
+  category: PurposeCategory;
+  status: PurposeStatus;
+  targetDate?: string;
+  nextAction: string;
+  floorAction: string;
+  ifTrigger: string;
+  thenAction: string;
+  doneCount: number;
+  reviewCount: number;
+  lastDoneAt?: string;
+  shareCandidate: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PurposeEventType = "created" | "step_done" | "review" | "paused" | "done";
+
+export type PurposeEvent = {
+  id: string;
+  purposeId: string;
+  type: PurposeEventType;
+  title: string;
+  note?: string;
+  planned?: string;
+  happened?: string;
+  learned?: string;
+  nextAction?: string;
+  energy?: EnergyLevel;
+  happenedAt: string;
+  createdAt: string;
+  shareCandidate: boolean;
+};
+
+export type PurposeStats = {
+  activeCount: number;
+  doneToday: number;
+  totalDone: number;
+  reviewCount: number;
+};
 
 export type LifelogStats = {
   todayEntries: number;

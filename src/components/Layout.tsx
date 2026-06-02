@@ -7,7 +7,8 @@ const nav = [
 ];
 
 export function Layout({ children, route }: { children: ReactNode; route: string }) {
-  const immersive = route.startsWith("/new");
+  const immersive = route.startsWith("/new") || route.startsWith("/goal");
+  const showFab = !immersive && !route.startsWith("/more");
   return (
     <div className="app-shell">
       <header className="topbar">
@@ -15,7 +16,7 @@ export function Layout({ children, route }: { children: ReactNode; route: string
         <span className="privacy-pill">ローカル保存</span>
       </header>
       <main className="content">{children}</main>
-      {!immersive && <a className="fab" href="#/new" aria-label="新しいログを作成">+</a>}
+      {showFab && <a className="fab" href="#/new" aria-label="新しい記録を作成"><span>＋</span><strong>記録</strong></a>}
       {!immersive && (
         <nav className="bottom-nav" aria-label="主要ナビゲーション">
           {nav.map(([label, href]) => (

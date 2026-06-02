@@ -7,6 +7,7 @@ import { Layout } from "./components/Layout";
 import { TodayPage } from "./pages/TodayPage";
 import { JournalPage } from "./pages/JournalPage";
 import { EditorPage } from "./pages/EditorPage";
+import { PurposePage } from "./pages/PurposePage";
 import { MorePage } from "./pages/MorePage";
 import { BackupPage } from "./pages/BackupPage";
 import { SettingsPage } from "./pages/SettingsPage";
@@ -49,6 +50,7 @@ function App() {
 function Route({ route }: { route: string }) {
   if (route.startsWith("/journal")) return <JournalPage route={route} />;
   if (route.startsWith("/new")) return <EditorPage />;
+  if (route.startsWith("/goal")) return <PurposePage route={route} />;
   if (route.startsWith("/more")) return <MorePage />;
   if (route.startsWith("/backup")) return <BackupPage />;
   if (route.startsWith("/settings")) return <SettingsPage />;

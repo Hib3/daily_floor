@@ -14,20 +14,21 @@ export default defineConfig({
       manifest: {
         name: "Daily Floor",
         short_name: "Floor",
-        description: "日記、気分、写真、添付、休養ログを時系列で残すローカルファーストPWA",
+        description: "目的、達成、振り返り、日記を時系列で残すローカルファーストPWA",
         start_url: `${base}#/today`,
         scope: base,
         display: "standalone",
         orientation: "portrait",
-        background_color: "#f7f5ef",
-        theme_color: "#40685a",
+        background_color: "#07090c",
+        theme_color: "#63d5ff",
         icons: [
           { src: "icons/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any maskable" }
         ],
         shortcuts: [
           { name: "今日", short_name: "今日", url: `${base}#/today`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "ジャーナル", short_name: "記録", url: `${base}#/journal`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
-          { name: "新規ログ", short_name: "新規", url: `${base}#/new`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
+          { name: "新規記録", short_name: "記録", url: `${base}#/new`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
+          { name: "目的を作る", short_name: "目的", url: `${base}#/goal/new`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "カレンダー", short_name: "暦", url: `${base}#/journal?view=calendar`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "ガイド", short_name: "案内", url: `${base}#/more`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "バックアップ", short_name: "保存", url: `${base}#/backup`, icons: [{ src: "icons/icon.svg", sizes: "any" }] }
