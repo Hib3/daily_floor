@@ -28,6 +28,8 @@ export class DailyFloorDb extends Dexie {
   sharedNotes!: Table<SharedNote, string>;
   weeklyReports!: Table<{ id: string; markdown: string; createdAt: string }, string>;
   backupMeta!: Table<{ id: string; exportedAt: string; note?: string }, string>;
+  lifelogJournals!: Table<import("./types").LifelogJournal, string>;
+  lifelogEntries!: Table<import("./types").LifelogEntry, string>;
 
   constructor() {
     super("DailyFloorDB");
@@ -46,6 +48,23 @@ export class DailyFloorDb extends Dexie {
       weeklyReports: "id,createdAt",
       backupMeta: "id,exportedAt"
     });
+    this.version(2).stores({
+      checkins: "id,date,energyLevel",
+      tasks: "id,category,active",
+      avoidanceSessions: "id,date,taskId,outcome,cascadeStepReached",
+      intentions: "id,taskId,enabled",
+      timerSessions: "id,date,taskId",
+      restLogs: "id,date,taskId,counselorShareCandidate",
+      sleepLogs: "id,date",
+      reminderRules: "id,enabled,kind",
+      riskFlags: "id,date,type",
+      settings: "id",
+      sharedNotes: "id,taskId",
+      weeklyReports: "id,createdAt",
+      backupMeta: "id,exportedAt",
+      lifelogJournals: "id,name",
+      lifelogEntries: "id,journalId,kind,happenedAt,createdAt,mood,shareCandidate"
+    });
   }
 }
 
@@ -55,13 +74,15 @@ export async function seedIfNeeded(database = db): Promise<void> {
   const settings = await database.settings.get("app");
   if (settings) {
     await ensureGeneralLifeSeed(database);
+    await seedLifelogIfNeeded(database);
     return;
   }
-  await database.transaction("rw", database.tasks, database.intentions, database.reminderRules, database.settings, async () => {
+  await database.transaction("rw", [database.tasks, database.intentions, database.reminderRules, database.settings, database.lifelogJournals, database.lifelogEntries], async () => {
     await database.tasks.bulkPut(defaultTasks());
     await database.intentions.bulkPut(defaultIntentions());
     await database.reminderRules.bulkPut(defaultReminderRules());
     await database.settings.put(defaultSettings());
+    await seedLifelogIfNeeded(database);
   });
 }
 
@@ -96,6 +117,29 @@ async function ensureGeneralLifeSeed(database: DailyFloorDb): Promise<void> {
   if (checkinReminder?.title === "朝チェックイン") {
     await database.reminderRules.update("rem_0900", { title: "状態メモ" });
   }
+}
+
+async function seedLifelogIfNeeded(database: DailyFloorDb): Promise<void> {
+  const existing = await database.lifelogJournals.get("life");
+  if (existing) return;
+  const now = new Date().toISOString();
+  await database.lifelogJournals.bulkPut([
+    { id: "life", name: "ライフログ", description: "日々の出来事、気分、写真、添付をまとめる場所", color: "#4fc3f7", createdAt: now, updatedAt: now },
+    { id: "health", name: "からだ・こころ", description: "睡眠、休養、エネルギー、相談候補の事実ログ", color: "#78d6a3", createdAt: now, updatedAt: now }
+  ]);
+  await database.lifelogEntries.add({
+    id: "guide-entry",
+    journalId: "life",
+    kind: "text",
+    title: "Daily Floor Lifeへようこそ",
+    body: "ここは長い日記だけでなく、1行、気分、写真、ファイル、休養ログを時系列で残す場所です。書けない日も、短い記録として扱います。",
+    tags: ["guide"],
+    attachments: [],
+    happenedAt: now,
+    createdAt: now,
+    updatedAt: now,
+    shareCandidate: false
+  });
 }
 
 export async function clearAllLocalData(database = db): Promise<void> {

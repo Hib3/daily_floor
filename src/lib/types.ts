@@ -152,6 +152,53 @@ export type SharedNote = {
   createdAt: string;
 };
 
+export type LifelogJournal = {
+  id: string;
+  name: string;
+  description?: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type LifelogKind = "text" | "mood" | "photo" | "file" | "health" | "rest" | "later";
+
+export type LifelogMood = "good" | "flat" | "heavy" | "anxious" | "tired" | "unknown";
+
+export type LifelogAttachment = {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  dataUrl: string;
+};
+
+export type LifelogEntry = {
+  id: string;
+  journalId: string;
+  kind: LifelogKind;
+  title?: string;
+  body: string;
+  mood?: LifelogMood;
+  energy?: EnergyLevel;
+  tags: string[];
+  attachments: LifelogAttachment[];
+  happenedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  shareCandidate: boolean;
+};
+
+export type LifelogView = "list" | "calendar" | "media";
+
+export type LifelogStats = {
+  todayEntries: number;
+  totalEntries: number;
+  restEntries: number;
+  latestAt?: string;
+  monthEntryDays: Record<string, number>;
+};
+
 export type WeeklyAnalysis = {
   checkinDays: number;
   taskContactDays: number;

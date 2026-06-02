@@ -5,13 +5,11 @@ import "./styles.css";
 import { seedIfNeeded } from "./lib/db";
 import { Layout } from "./components/Layout";
 import { TodayPage } from "./pages/TodayPage";
-import { CheckinPage } from "./pages/CheckinPage";
-import { CascadePage } from "./pages/CascadePage";
-import { SimplePages } from "./pages/SimplePages";
-import { ReportsPage } from "./pages/ReportsPage";
+import { JournalPage } from "./pages/JournalPage";
+import { EditorPage } from "./pages/EditorPage";
+import { MorePage } from "./pages/MorePage";
 import { BackupPage } from "./pages/BackupPage";
 import { SettingsPage } from "./pages/SettingsPage";
-import { GuidePage } from "./pages/GuidePage";
 
 function useHashRoute(): string {
   const [route, setRoute] = useState(location.hash.replace(/^#/, "") || "/today");
@@ -49,15 +47,11 @@ function App() {
 }
 
 function Route({ route }: { route: string }) {
-  if (route.startsWith("/checkin")) return <CheckinPage />;
-  if (route.startsWith("/cascade")) return <CascadePage route={route} />;
-  if (route.startsWith("/reports")) return <ReportsPage />;
+  if (route.startsWith("/journal")) return <JournalPage route={route} />;
+  if (route.startsWith("/new")) return <EditorPage />;
+  if (route.startsWith("/more")) return <MorePage />;
   if (route.startsWith("/backup")) return <BackupPage />;
   if (route.startsWith("/settings")) return <SettingsPage />;
-  if (route.startsWith("/guide")) return <GuidePage />;
-  if (["/tasks", "/intentions", "/bundles", "/timers", "/sleep", "/night-review", "/review", "/share"].some((item) => route.startsWith(item))) {
-    return <SimplePages route={route} />;
-  }
   return <TodayPage />;
 }
 

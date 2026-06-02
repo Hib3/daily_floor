@@ -14,7 +14,7 @@ export default defineConfig({
       manifest: {
         name: "Daily Floor",
         short_name: "Floor",
-        description: "接触・floor・休養ログを大切にするローカルファーストPWA",
+        description: "日記、気分、写真、添付、休養ログを時系列で残すローカルファーストPWA",
         start_url: `${base}#/today`,
         scope: base,
         display: "standalone",
@@ -25,11 +25,11 @@ export default defineConfig({
           { src: "icons/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any maskable" }
         ],
         shortcuts: [
-          { name: "今日のfloor", short_name: "今日", url: `${base}#/today`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
-          { name: "状態メモ", short_name: "状態", url: `${base}#/checkin`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
-          { name: "カスケード開始", short_name: "開始", url: `${base}#/cascade`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
-          { name: "夜レビュー", short_name: "夜", url: `${base}#/night-review`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
-          { name: "レポート", short_name: "報告", url: `${base}#/reports`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
+          { name: "今日", short_name: "今日", url: `${base}#/today`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
+          { name: "ジャーナル", short_name: "記録", url: `${base}#/journal`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
+          { name: "新規ログ", short_name: "新規", url: `${base}#/new`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
+          { name: "カレンダー", short_name: "暦", url: `${base}#/journal?view=calendar`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
+          { name: "ガイド", short_name: "案内", url: `${base}#/more`, icons: [{ src: "icons/icon.svg", sizes: "any" }] },
           { name: "バックアップ", short_name: "保存", url: `${base}#/backup`, icons: [{ src: "icons/icon.svg", sizes: "any" }] }
         ],
         share_target: {
